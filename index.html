@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linguist Pro | Aprender Idiomas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="glass-background"></div>
+    <div class="app">
+        <div class="main-grid">
+        <div class="client-card">
+            <header>
+                <h1>Linguist Pro</h1>
+                <p>Aprender Idiomas - Versión Pro</p>
+                <button id="btn-edit-responses" class="btn-header">⚙️ Editar respuestas</button>
+            </header>
+
+            <!-- Modal para editar respuestas -->
+            <div id="edit-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Tus Respuestas Rápidas</h2>
+                        <button id="btn-close-modal" class="btn-close">✕</button>
+                    </div>
+                    <div class="help-text">
+                        <p>✏️ <strong>Editar:</strong> Modifica cualquier texto directamente</p>
+                        <p>➕ <strong>Agregar:</strong> Escribe una frase nueva y presiona "Agregar"</p>
+                        <p>🗑️ <strong>Eliminar:</strong> Borra frases que no uses</p>
+                    </div>
+                    <div id="responses-list" class="responses-list"></div>
+                    <div class="modal-footer">
+                        <input type="text" id="new-response-input" placeholder="Nueva respuesta..." maxlength="50">
+                        <button id="btn-add-response" class="btn-add">➕ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="label-row">
+                    <span class="badge">Idioma Extrañero</span>
+                    <select id="client-lang">
+                        <option value="en-US">Inglés</option>
+                        <option value="pt-BR">Portugués</option>
+                        <option value="fr-FR">Francés</option>
+                        <option value="de-DE">Alemán</option>
+                        <option value="it-IT">Italiano</option>
+                        <option value="ja-JP">Japonés</option>
+                        <option value="th-TH">Tailandés</option>
+                        <option value="ko-KR">Coreano</option>
+                        <option value="ru-RU">Ruso</option>
+                        <option value="da-DK">Danés</option>
+                        <option value="nl-NL">Holandés</option>
+                        <option value="no-NO">Noruego</option>
+                        <option value="zh-CN">Chino</option>
+                    </select>
+                </div>
+
+                <div id="client-output" class="output-box">
+                    <p class="hint">Toque abajo para escuchar...</p>
+                </div>
+
+                <button id="btn-listen" class="btn-primary">
+                    🎤 PRACTICAR PRONUNCIACIÓN
+                </button>
+            </div>
+        </div>
+
+        <div class="staff-card">
+            <div class="section">
+                <div class="label-row">
+                    <span class="badge staff">Mi Traducción</span>
+                    <select id="speech-speed">
+                        <option value="1">Normal</option>
+                        <option value="0.8">Lento</option>
+                        <option value="0.5">Muy Lento</option>
+                    </select>
+                </div>
+
+                <!-- Respuestas Rápidas -->
+                <div class="quick-responses">
+                    <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px;">Respuestas rápidas:</p>
+                    <div class="response-buttons">
+                        <button class="btn-quick" data-response="¿Cómo se dice...?">¿Cómo se dice...?</button>
+                        <button class="btn-quick" data-response="No entiendo">No entiendo</button>
+                        <button class="btn-quick" data-response="¿Puede repetir?">¿Puede repetir?</button>
+                        <button class="btn-quick" data-response="¿Qué significa...?">¿Qué significa...?</button>
+                        <button class="btn-quick" data-response="Estoy practicando">Estoy practicando</button>
+                        <button class="btn-quick" data-response="Gracias">Gracias</button>
+                    </div>
+                </div>
+
+                <textarea id="staff-input" placeholder="Escriba aquí su respuesta..."></textarea>
+
+                <div id="translation-preview" class="preview-box"></div>
+
+                <button id="btn-speak" class="btn-secondary">
+                    🔊 ESCUCHAR MODELO
+                </button>
+            </div>
+        </div>
+        </div>
+        <footer>
+        <p>Soporte: +xxxxxxxxxxxx</p>
+        <p>&copy; 2026 Aprender Idiomas</p>
+    </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
