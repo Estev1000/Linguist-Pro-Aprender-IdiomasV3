@@ -15,7 +15,7 @@ let responseTranslations = JSON.parse(localStorage.getItem('responseTranslations
 
 if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
 } else {
     alert("Este navegador no soporta reconocimiento de voz. Use Chrome o Safari.");
@@ -48,40 +48,22 @@ function resetBtn() {
     }
 }
 
-// --- ESCUCHAR CLIENTE ---
+// --- ESCUCHAR CLIENTE (Push-to-Talk) ---
 
-btnListen.addEventListener('click', () => {
-    if (!recognition) return;
+function startListening() {
+    if (!recognition || isRecording) return;
     
-    // Si ya está grabando, detener
-    if (isRecording) {
-        try {
-            recognition.stop();
-            resetBtn();
-        } catch (e) {
-            console.error(e);
-            resetBtn();
-        }
-        return;
-    }
-    
-    // Iniciar grabación directamente
     try {
         isRecording = true;
         recognition.lang = clientLang.value;
         recognition.start();
         btnListen.classList.add('recording');
-        clientOutput.innerHTML = '<p class="placeholder">Te escucho... Practica tu frase.</p>';
+        clientOutput.innerHTML = '<p class="placeholder">Te escucho... Suelta para terminar.</p>';
         
         // Timeout de seguridad: máximo 15 segundos
         recordingTimeout = setTimeout(() => {
             if (isRecording) {
-                try {
-                    recognition.stop();
-                } catch (e) {
-                    console.error(e);
-                }
-                resetBtn();
+                stopListening();
             }
         }, 15000);
     } catch (e) {
@@ -89,11 +71,40 @@ btnListen.addEventListener('click', () => {
         clientOutput.innerHTML = '<p style="color:red">❌ Error al iniciar grabación: ' + e.message + '</p>';
         resetBtn();
     }
-});
+}
+
+function stopListening() {
+    if (!isRecording) return;
+    try {
+        recognition.stop();
+    } catch (e) {
+        console.error(e);
+    }
+    resetBtn();
+}
+
+// Eventos para PC
+btnListen.addEventListener('mousedown', startListening);
+btnListen.addEventListener('mouseup', stopListening);
+btnListen.addEventListener('mouseleave', stopListening);
+
+// Eventos para Móviles
+btnListen.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Evitar comportamientos extraños en móviles
+    startListening();
+}, { passive: false });
+
+btnListen.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    stopListening();
+}, { passive: false });
 
 if (recognition) {
     recognition.onresult = async (event) => {
-        const text = event.results[0][0].transcript;
+        let text = '';
+        for (let i = 0; i < event.results.length; i++) {
+            text += event.results[i][0].transcript;
+        }
         clientOutput.innerHTML = `<p><strong>Mi voz:</strong> ${text}</p>`;
         
         // Traducir a Español
@@ -106,8 +117,6 @@ if (recognition) {
         } catch (err) {
             clientOutput.innerHTML += '<p style="color:red">❌ Error al traducir.</p>';
         }
-        
-        resetBtn();
     };
 
     recognition.onerror = (event) => {
